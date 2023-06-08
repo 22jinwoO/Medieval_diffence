@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour
 {
+    static public Player instance;
+
     public Transform _towerPos;
     public GameManager gmCs;
     public UIManager uiManager;
@@ -14,7 +16,20 @@ public class Player : MonoBehaviour
     public Transform normalTower;
     public Transform _gndTr; // 설치할 땅의 오브젝트 위치
     public bool isCanbuild; // 설치 가능 여부 확인
+    public int towerIndex;
     Ray ray;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != null)
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     void Start()
     {
@@ -32,48 +47,63 @@ public class Player : MonoBehaviour
         {
             if (gmCs.isBuilding)    // 유저가 타워 버튼을 클릭했을 때
             {
-                normalTower.position = Vector3.MoveTowards(new Vector3(normalTower.position.x, 0, normalTower.position.z), new Vector3(hit.point.x, 0, hit.point.z), 1f);
+                //normalTower.position = Vector3.MoveTowards(new Vector3(normalTower.position.x, 0, normalTower.position.z), new Vector3(hit.point.x, 0, hit.point.z), 1f);
+                normalTower.position = new Vector3(hit.point.x, 0, hit.point.z);
+                // 타워 1을 클릭하고 나서 2를 클릭하면 비활성화되게
             }
             
 
-            if (Input.GetMouseButtonDown(0) && isCanbuild)
+            if (Input.GetMouseButtonDown(0) && _gndTr !=null && isCanbuild)
             {
-                GameObject normalTower = Instantiate(gmCs._gMbuildList[0], _gndTr.position + new Vector3(0, 0.4f, 0), Quaternion.identity);
-                normalTower.name = "궁수(1단계)";
-                normalTower.SetActive(true);
-                Renderer[] rend = normalTower.GetComponentsInChildren<Renderer>();
-                for (int i = 0; i < rend.Length; i++)
-                {
-                    rend[i].material.color = new Color(rend[i].material.color.r, rend[i].material.color.g, rend[i].material.color.b, 1f);
-                }
-                gmCs._gMbuildList[0].SetActive(false);
-                gmCs.isBuilding = false;
-                //uiManager.isPopUpShow = false;
-                
-                uiManager.StartCoroutine(uiManager.BuildTowerPopUp());
+                BuildTower(towerIndex);
             }
             //BuildTower(hit);
         }
     }
 
-    void BuildTower(RaycastHit hit)   // 타워 만드는 함수
+    void BuildTower(int towerIndex)   // 타워 만드는 함수
     {
-        switch (hit.transform.tag)
+        GameObject tower = Instantiate(gmCs._gmBuildList[towerIndex], _gndTr.position + new Vector3(0, 0.4f, 0), Quaternion.identity);
+        tower.name = $"궁수({towerIndex+1}단계)";
+        tower.SetActive(true);
+        Renderer[] rend = tower.GetComponentsInChildren<Renderer>();
+
+        for (int i = 0; i < rend.Length; i++)
         {
-            case "possBuild":
-                _ground = hit.transform.gameObject.GetComponent<Ground>();
-                _towerPos= _ground.transform;   //타워 설치할 땅의 위치 전달
-                _buildListUI.SetActive(true);  // 타워 리스트 이미지 오브젝트 활성화
-                
-                break;
-            case "imPossBuild":
-                _ground = hit.transform.gameObject.GetComponent<Ground>();
-                _buildListUI.SetActive(false);  // 타워 리스트 이미지 오브젝트 비활성화
-                break;
-            default:
-                break;
+            rend[i].material.color = new Color(rend[i].material.color.r, rend[i].material.color.g, rend[i].material.color.b, 1f);
         }
+
+        switch (towerIndex)
+        {
+            case 0:
+                ArchorTower1 archorTower1 = tower.GetComponent<ArchorTower1>();
+                archorTower1._isCanAtk = true;
+                GameManager.instance._playerGold -= archorTower1.unitPrice;
+                UIManager.instance._playerGoldTxt.text = $"골드 보유량 : {GameManager.instance._playerGold} Gold";
+                break;
+
+            case 1:
+                ArchorTower2 archorTower2 = tower.GetComponent<ArchorTower2>();
+                archorTower2._isCanAtk = true;
+                GameManager.instance._playerGold -= archorTower2.unitPrice;
+                UIManager.instance._playerGoldTxt.text = $"골드 보유량 : {GameManager.instance._playerGold} Gold";
+                break;
+
+            case 2:
+                ArchorTower3 archorTower3 = tower.GetComponent<ArchorTower3>();
+                archorTower3._isCanAtk = true;
+                GameManager.instance._playerGold -= archorTower3.unitPrice;
+                UIManager.instance._playerGoldTxt.text = $"골드 보유량 : {GameManager.instance._playerGold} Gold";
+                break;
+
+        }
+        
+        gmCs._gmBuildList[towerIndex].SetActive(false);
+        gmCs.isBuilding = false;
+
+        uiManager.StartCoroutine(uiManager.BuildTowerPopUp());
     }
+
 
     
 

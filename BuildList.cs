@@ -31,15 +31,15 @@ public class BuildList : MonoBehaviour/*, IPointerEnterHandler, IPointerExitHand
     //    switch(gameObject.name) // 게임 오브젝트 이름에 구분지어 설치할 타워 보여줌
     //    {
     //        case "Normal TowerBtn":
-    //            gmSc._gMbuildList[0].SetActive(true);
-    //            print(gmSc._gMbuildList[0].name);
-    //            gmSc._gMbuildList[0].transform.position = playerSc._towerPos.position+new Vector3(0,0.4f,0);
+    //            gmSc._gmBuildList[0].SetActive(true);
+    //            print(gmSc._gmBuildList[0].name);
+    //            gmSc._gmBuildList[0].transform.position = playerSc._towerPos.position+new Vector3(0,0.4f,0);
     //            break;
 
     //        case "Skill TowerBtn":
-    //            gmSc._gMbuildList[1].SetActive(true);
-    //            print(gmSc._gMbuildList[1].name);
-    //            gmSc._gMbuildList[1].transform.position = playerSc._towerPos.position+Vector3.up;
+    //            gmSc._gmBuildList[1].SetActive(true);
+    //            print(gmSc._gmBuildList[1].name);
+    //            gmSc._gmBuildList[1].transform.position = playerSc._towerPos.position+Vector3.up;
     //            break;
     //    }
     //}
@@ -52,14 +52,14 @@ public class BuildList : MonoBehaviour/*, IPointerEnterHandler, IPointerExitHand
     //        {
     //            grounds[i].isWorking = false;
     //        }
-    //        print(gmSc._gMbuildList[0]);
-    //        gmSc._gMbuildList[0].SetActive(false);  //예시용 투명화된 일반타워 다시 비활성화
+    //        print(gmSc._gmBuildList[0]);
+    //        gmSc._gmBuildList[0].SetActive(false);  //예시용 투명화된 일반타워 다시 비활성화
     //    }
     //}
     //public void ClickNormalTower()  //일반 타워 설치하는 함수
     //{
     //    print(gameObject.name);
-    //    GameObject normalTower=Instantiate(gmSc._gMbuildList[0], playerSc._towerPos.position + new Vector3(0, 0.4f, 0), Quaternion.identity);
+    //    GameObject normalTower=Instantiate(gmSc._gmBuildList[0], playerSc._towerPos.position + new Vector3(0, 0.4f, 0), Quaternion.identity);
     //    normalTower.SetActive(true);
     //    Renderer[] rend =normalTower.GetComponentsInChildren<Renderer>();
     //    for (int i = 0; i < rend.Length; i++)
